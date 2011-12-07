@@ -16,9 +16,7 @@ body {
   z-index: 100000;
 }
 .humane {
-  font-family: Ubuntu, Verdana, sans-serif;
   line-height: 40px;
-  font-size: 35px;
   top: 25%;
   left: 25%;
   opacity: 0;
