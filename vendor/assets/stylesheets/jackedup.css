@@ -16,6 +16,8 @@ body {
   z-index: 100000;
 }
 .humane {
+  font-family: Helvetica Neue, Helvetica, san-serif;
+  font-size: 18px;
   letter-spacing: -1px;
   top: 20px;
   left: 30%;
