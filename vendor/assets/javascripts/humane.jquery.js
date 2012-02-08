@@ -1,206 +1,207 @@
 /**
- * HumaneJS
+ * humane.js
  * Humanized Messages for Notifications
  * @author Marc Harter (@wavded)
- * @contributers
- *   Alexander (@bga_)
- *   Jose (@joseanpg)
- *   Will McKenzie (@OiNutter)
  * @example
  *   humane('hello world');
  * See more usage examples at: http://wavded.github.com/humane-js/
  */
 ;(function (win,doc) {
-  var on,
-  	  off,
-  	  isArray,
-  	  eventing = false,
-  	  animationInProgress = false,
-  	  humaneEl = null,
-  	  timeout = null,
-  	  useFilter = /msie [678]/i.test(navigator.userAgent), // sniff, sniff,
-  	  vendors = {Webkit: 'webkit', Moz: '', O: 'o', ms: 'MS'},
-  	  eventPrefix = "",
-  	  isSetup = false,
-  	  queue = [],
-  	  after = null;
 
-  if ('addEventListener' in win) {
-    on  = function (obj,type,fn) { obj.addEventListener(type,fn,false)    };
-    off = function (obj,type,fn) { obj.removeEventListener(type,fn,false) };
-  }
-  else {
-    on  = function (obj,type,fn) { obj.attachEvent('on'+type,fn) };
-    off = function (obj,type,fn) { obj.detachEvent('on'+type,fn) };
-  }
-  isArray = Array.isArray || function (obj) { return Object.prototype.toString.call(obj) === '[object Array]' };
+   var humane, on, off, isArray,
+      eventing = false,
+      useTransitions = false,
+      animationInProgress = false,
+      humaneEl = null,
+      timeout = null,
+      useFilter = /msie [678]/i.test(navigator.userAgent), // sniff, sniff
+      vendors = { Webkit: 'webkit', Moz: '', O: 'o', ms: 'MS' },
+      eventPrefix = "",
+      isSetup = false,
+      currentMessage = {},
+      noop = function(){},
+      events = { 'add': noop, 'show': noop, 'hide': noop },
+      queue = [];
 
-  function normalizeEvent(name) {
-	  return eventPrefix ? eventPrefix + name : name.toLowerCase();
-  }
+   if ('addEventListener' in win) {
+      on  = function (obj,type,fn) { obj.addEventListener(type,fn,false)    };
+      off = function (obj,type,fn) { obj.removeEventListener(type,fn,false) };
+   }
+   else {
+      on  = function (obj,type,fn) { obj.attachEvent('on'+type,fn) };
+      off = function (obj,type,fn) { obj.detachEvent('on'+type,fn) };
+   }
 
-  on (win,'load',function () {
-    var transitionSupported = ( function (style) {
-      var prefixes = ['MozT','WebkitT','OT','msT','KhtmlT','t'];
-      for(var i = 0, prefix; prefix = prefixes[i]; i++) {
-        if (prefix+'ransition' in style) return true;
+   isArray = Array.isArray || function (obj) { return Object.prototype.toString.call(obj) === '[object Array]' };
+
+   function normalizeEvent(name) {
+      return eventPrefix ? eventPrefix + name : name.toLowerCase();
+   }
+
+   function getConfig(type, config) {
+      return win.humane[type][config] !== void 0 ? win.humane[type][config] : win.humane[config];
+   }
+
+   on (win,'load', setup);
+
+   function setup() {
+      humaneEl = doc.createElement('div');
+      humaneEl.id = 'humane';
+      humaneEl.className = 'humane';
+      doc.body.appendChild(humaneEl);
+      for (vendor in vendors) {
+         if (vendor + 'TransitionProperty' in humaneEl.style) {
+            eventPrefix = vendors[vendor];
+            useTransitions = true;
+         }
       }
-      return false;
-    }(doc.body.style));
-    if (!transitionSupported) animate = jsAnimateOpacity; // use js animation when no transition support
-
-    setup(); run();
-  });
-
-  function setup() {
-    humaneEl = doc.createElement('div');
-    humaneEl.id = 'humane';
-    humaneEl.className = 'humane';
-    doc.body.appendChild(humaneEl);
-    for (vendor in vendors){
-    	if (humaneEl.style[vendor + 'TransitionProperty'] !== undefined)
-    	      eventPrefix = vendors[vendor];
-    }
-    isSetup = true;
-  }
-
-  function remove() {
-    off (doc.body,'mousemove',remove);
-    off (doc.body,'click',remove);
-    off (doc.body,'keypress',remove);
-    off (doc.body,'touchstart',remove);
-    eventing = false;
-    if (humane.clickToClose) { off (humaneEl,'click',remove); off (humaneEl, 'touchstart', remove); }
-    if (animationInProgress) animate(0);
-  }
-
-  function run() {
-    if (animationInProgress && !win.humane.forceNew) return;
-    if (!queue.length) { remove(); return; }
-    after = null;
-    animationInProgress = true;
-    if (timeout) {
-      clearTimeout(timeout);
-      timeout = null;
-    }
-    timeout = setTimeout(function(){ // allow notification to stay alive for timeout
-      if (!eventing) {
-        on (doc.body,'mousemove',remove);
-        on (doc.body,'click',remove);
-        on (doc.body,'keypress',remove);
-        on (doc.body,'touchstart',remove);
-        eventing = true;
-        if(!win.humane.waitForMove) remove();
-      }
-    }, win.humane.timeout);
-
-    if (humane.clickToClose) { on (humaneEl,'click',remove); on (humaneEl, 'touchstart', remove); }
-
-    var next = queue.shift(),
-    	type = next[0],
-    	content = next[1],
-    	callback = next[2];
-
-    after = callback;
-    if ( isArray(content) ) content = '<ul><li>' + content.join('<li>') + '</ul>';
-
-    humaneEl.innerHTML = content;
-    animate(type,1);
-  }
-
-  function animate (type,level) {
-    if(level === 1){
-      humaneEl.className = "humane humane-" + type + " humane-animate";
-    }
-    else {
-      humaneEl.className = humaneEl.className.replace(" humane-animate","");
-      if(after!=null)
-    	  on(humaneEl,normalizeEvent('TransitionEnd'),after);
-      end();
-    }
-  }
-
-  function end(){
-    setTimeout(function(){
-      animationInProgress = false;
+      if (!useTransitions) animate = jsAnimateOpacity; // use js animation when no transition support
+      isSetup = true;
       run();
-    },500);
-  }
+   }
 
-  // if CSS Transitions not supported, fallback to JS Animation
-  var setOpacity = (function(){
-    if (useFilter) {
-      return function(opacity){
-        humaneEl.filters.item('DXImageTransform.Microsoft.Alpha').Opacity = opacity*100;
+   function run() {
+      if (animationInProgress) return;
+      if (!queue.length) return;
 
+      after = null;
+      animationInProgress = true;
+      if (timeout) {
+         clearTimeout(timeout);
+         timeout = null;
       }
-    }
-    else {
-      return function (opacity) { humaneEl.style.opacity = String(opacity); }
-    }
-  }());
 
-  function jsAnimateOpacity(type,level){
-    var interval;
-    var opacity;
+      var next = queue.shift();
+      currentMessage = { type: next[0], message: next[1], callback: next[2] };
+      var content = currentMessage.message,
+         type = currentMessage.type;
 
-    if (level === 1) {
-      opacity = 0;
-      humaneEl.className = "humane humane-js-animate humane-" + type;
-      if (humaneEl.filters) humaneEl.filters.item('DXImageTransform.Microsoft.Alpha').Opacity = 0; // reset value so hover states work
-
-      if (win.humane.forceNew) {
-        opacity = useFilter
-          ? humaneEl.filters.item('DXImageTransform.Microsoft.Alpha').Opacity/100|0
-          : humaneEl.style.opacity|0;
+      if ( getConfig(type, 'clickToClose') === true ) {
+         on (humaneEl, 'click', remove);
+         on (humaneEl, 'touchstart', remove);
       }
-      interval = setInterval(function(){
-        if (opacity < 1) {
-          opacity += 0.1;
-          if (opacity > 1) opacity = 1;
-          setOpacity(opacity);
-        }
-        else {
-          clearInterval(interval);
-        }
-      }, 100 / 20);
-    }
-    else {
-      opacity = 1;
-      interval = setInterval(function(){
-        if(opacity > 0) {
-          opacity -= 0.1;
-          if (opacity < 0) opacity = 0;
-          setOpacity(opacity);
-        }
-        else {
-          humaneEl.className = humaneEl.className.replace(" humane-js-animate","");
-          clearInterval(interval);
-          if(after!=null)
-        	  after();
-          end();
-        }
-      }, 100 / 20);
-    }
-  }
 
-  function notifier (type) {
-    return function (message,callback) {
-      queue.push( [type, message,callback] );
-      if(isSetup) run();
-    }
-  }
+      var timeoutInMillis = getConfig(type, 'timeout');
 
-  win.humane = notifier('log');
+      if (timeoutInMillis > 0) {
+         timeout = setTimeout(function(){ // allow notification to stay alive for timeout
+            if (!eventing) {
+               on (doc.body, 'mousemove', remove);
+               on (doc.body, 'click', remove);
+               on (doc.body, 'keypress', remove);
+               on (doc.body, 'touchstart', remove);
+               eventing = true;
+               if( getConfig(type, 'waitForMove') !== true ) remove();
+            }
+         }, timeoutInMillis);
+      }
 
-  win.humane.log = notifier('log');
-  win.humane.error = notifier('error');
-  win.humane.info = notifier('info');
-  win.humane.success = notifier('success');
+      events['show'](type,content,'show');
+      if ( isArray(content) ) content = '<ul><li>' + content.join('<li>') + '</ul>';
 
-  win.humane.timeout = 2500;
-  win.humane.waitForMove = false;
-  win.humane.forceNew = false;
-  win.humane.clickToClose = false;
+      humaneEl.innerHTML = content;
+      humaneEl.style.display = 'block';
+      setTimeout(function(){ animate(1,type); },50) // prevent queueing display in animation
+   }
 
-}( window, document));
+   function animate (level,type) {
+      if (level === 1) {
+         humaneEl.className = "humane humane-" + type + " humane-animate";
+      }
+      else {
+         humaneEl.className = humaneEl.className.replace(" humane-animate","");
+         on ( humaneEl, normalizeEvent('TransitionEnd'), end );
+      }
+   }
+
+   function remove() {
+      off (doc.body, 'mousemove', remove);
+      off (doc.body, 'click', remove);
+      off (doc.body, 'keypress', remove);
+      off (doc.body, 'touchstart', remove);
+      // remove click and touchstart in case clickToClose was added
+      off (humaneEl, 'click', remove);
+      off (humaneEl, 'touchstart', remove);
+      eventing = false;
+      if (animationInProgress) animate(0);
+   }
+
+
+   function end() {
+      // turn off animation event if supported, a little trigger happy
+      if (useTransitions) off ( humaneEl, normalizeEvent('TransitionEnd'), end );
+      animationInProgress = false;
+      if (currentMessage.callback) currentMessage.callback();
+      events['hide'](currentMessage.type, currentMessage.message,'hide');
+      humaneEl.style.display = 'none';
+      run();
+   }
+
+   var setOpacity = useFilter
+      ? function (opacity) { humaneEl.filters.item('DXImageTransform.Microsoft.Alpha').Opacity = opacity*100; }
+      : function (opacity) { humaneEl.style.opacity = String(opacity); }
+
+   function jsAnimateOpacity (level,type) {
+      var interval;
+      var opacity;
+
+      if (level === 1) {
+         opacity = 0;
+         humaneEl.className = "humane humane-js-animate humane-" + type;
+         if (useFilter) setOpacity(0); // reset value so hover states work
+         humaneEl.style.zIndex = 1000000;
+
+         interval = setInterval(function(){
+            if (opacity < 1) {
+               opacity += 0.1;
+               if (opacity > 1) opacity = 1;
+               setOpacity(opacity);
+            }
+            else {
+               clearInterval(interval);
+            }
+         }, 100 / 20);
+      }
+      else {
+         opacity = 1;
+         interval = setInterval(function(){
+            if(opacity > 0) {
+               opacity -= 0.1;
+               if (opacity < 0) opacity = 0;
+               setOpacity(opacity);
+            }
+            else {
+               humaneEl.className = humaneEl.className.replace(" humane-js-animate","");
+               humaneEl.style.zIndex = -1;
+               clearInterval(interval);
+               end();
+            }
+         }, 100 / 20);
+      }
+   }
+
+   function notifier (type) {
+      return function (message, cb) {
+         queue.push( [type, message, cb] );
+         events['add'](type,message,'add');
+         if (isSetup) run();
+      }
+   }
+
+   // types
+   humane = notifier('log');
+   humane.log = notifier('log');
+   humane.error = notifier('error');
+   humane.info = notifier('info');
+   humane.success = notifier('success');
+   humane.remove = remove;
+
+   // options
+   humane.timeout = 2500;
+   humane.waitForMove = false;
+   humane.clickToClose = false;
+
+   // events
+   humane.on = function(type, handler){ events[type] = handler; };
+   win.humane = humane;
+})( window, document );
