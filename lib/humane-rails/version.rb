@@ -1,3 +1,3 @@
 module HumaneRails
-  VERSION = "2.8.0.0.1.2"
+  VERSION = "3.0.4.0.1.2"
 end
