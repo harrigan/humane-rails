@@ -9,6 +9,8 @@
 This is a gemified version of Marc Harter's humane-js library. See http://wavded.github.com/humane-js/ for more details.
 
 [![Build Status](https://secure.travis-ci.org/harrigan/humane-rails.png)](http://travis-ci.org/harrigan/humane-rails)
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/harrigan/humane-rails)
+
 
 ## Instructions
 
