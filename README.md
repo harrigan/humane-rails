@@ -1,51 +1,47 @@
-<pre>
- _                                                      _ _     
-| |__  _   _ _ __ ___   __ _ _ __   ___       _ __ __ _(_) |___ 
-| '_ \| | | | '_ ` _ \ / _` | '_ \ / _ \_____| '__/ _` | | / __|
-| | | | |_| | | | | | | (_| | | | |  __/_____| | | (_| | | \__ \
-|_| |_|\__,_|_| |_| |_|\__,_|_| |_|\___|     |_|  \__,_|_|_|___/
-</pre>
+     _                                                      _ _ 
+    | |__  _   _ _ __ ___   __ _ _ __   ___       _ __ __ _(_) |___ 
+    | '_ \| | | | '_ ` _ \ / _` | '_ \ / _ \_____| '__/ _` | | / __|
+    | | | | |_| | | | | | | (_| | | | |  __/_____| | | (_| | | \__ \
+    |_| |_|\__,_|_| |_| |_|\__,_|_| |_|\___|     |_|  \__,_|_|_|___/
 
 This is a gemified version of Marc Harter's humane-js library. See http://wavded.github.com/humane-js/ for more details.
 
 [![Build Status](https://secure.travis-ci.org/harrigan/humane-rails.png)](http://travis-ci.org/harrigan/humane-rails)
 [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/harrigan/humane-rails)
 
-
 ## Instructions
 
 Add the following to your Gemfile:
 
-`gem "humane-rails"`
+```
+gem "humane-rails"
+``
 
-Then add the following to your application.js:
+Then add the following to your `application.js`:
 
-`//= require humane`
+```javascript
+//= require humane
+```
 
-and one of the following to your application.css:
+and one of the following to your `application.css`:
 
 ```css
-*= require humane
 *= require original
 ```
 
 ```css
-*= require humane
 *= require libnotify
 ```
 
 ```css
-*= require humane
 *= require bigbox
 ```
 
 ```css
-*= require humane
 *= require boldlight
 ```
 
 ```css
-*= require humane
 *= require jackedup
 ```
 
