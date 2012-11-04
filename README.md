@@ -24,15 +24,30 @@ Then add the following to your application.js:
 
 and one of the following to your application.css:
 
-`*= require original`
+```css
+*= require humane
+*= require original
+```
 
-`*= require libnotify`
+```css
+*= require humane
+*= require libnotify
+```
 
-`*= require bigbox`
+```css
+*= require humane
+*= require bigbox
+```
 
-`*= require boldlight`
+```css
+*= require humane
+*= require boldlight
+```
 
-`*= require jackedup`
+```css
+*= require humane
+*= require jackedup
+```
 
 Don't forget to run `bundle update` after upgrading to the latest gem version to ensure it's used by your Rails app.
 
