@@ -1,6 +1,6 @@
 module HumaneFlashMessagesHelper
   def humane_flash_messages
-    content = ''
+    content = ""
 
     unless flash[:notice].blank?
       content << javascript_tag("humane.notice(\"#{escape_javascript(flash[:notice])}\")")
