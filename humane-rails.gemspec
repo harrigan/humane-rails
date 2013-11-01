@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/harrigan/humane-rails"
   s.summary     = %q{A gemified version of Marc Harter's humane-js.}
   s.description = %q{A gemified version of Marc Harter's humane-js.}
+  s.license     = "MIT"
 
   s.rubyforge_project = "humane-rails"
 
