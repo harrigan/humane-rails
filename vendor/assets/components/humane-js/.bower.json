@@ -1,0 +1,20 @@
+{
+  "name": "humane-js",
+  "version": "3.1.0",
+  "author": "Marc Harter <@wavded> (wavded.com)",
+  "description": "A simple, modern, browser notification system",
+  "keywords": [
+    "notification",
+    "alert"
+  ],
+  "homepage": "https://github.com/wavded/humane-js",
+  "_release": "3.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.1.0",
+    "commit": "a912264a0ba36f48472e12e18fb04a7f8319bd35"
+  },
+  "_source": "git@github.com:wavded/humane-js.git",
+  "_target": "~3.1.0",
+  "_originalSource": "git@github.com:wavded/humane-js.git"
+}

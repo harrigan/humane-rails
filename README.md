@@ -17,35 +17,41 @@ Add the following to your Gemfile:
 gem "humane-rails"
 ```
 
-Then add the following to your `application.js`:
+the following directive to the top of your `application.js`:
 
 ```javascript
-//= require humane
+//= require humane-rails
 ```
 
-and one of the following to your `application.css`:
+and one of the following directives to the top of your `application.css`:
 
 ```css
-*= require original
-```
-
-```css
-*= require libnotify
+*= require humane-rails/original
 ```
 
 ```css
-*= require bigbox
+*= require humane-rails/libnotify
 ```
 
 ```css
-*= require boldlight
+*= require humane-rails/bigbox
 ```
 
 ```css
-*= require jackedup
+*= require humane-rails/boldlight
 ```
 
-Don't forget to run `bundle update` after upgrading to the latest gem version to ensure it's used by your Rails app.
+```css
+*= require humane-rails/jackedup
+```
+
+Don't forget to run `bundle update` after updating to the latest version of the gem to ensure that it is used by your Rails application.
+
+The gem also provides a helper for displaying flash messages:
+
+```ruby
+<%=raw humane_flash_messages %>
+```
 
 ## License
 

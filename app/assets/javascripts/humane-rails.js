@@ -1,4 +1,4 @@
-//= require humane.jquery
+//= require humane-js/humane
 
 humane.notice = humane.spawn({
   addnCls: 'humane-notice'

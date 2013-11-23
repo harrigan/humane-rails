@@ -1,0 +1,6 @@
+{
+  "name": "humane-rails",
+  "dependencies": {
+    "humane-js": "git@github.com:wavded/humane-js.git#~3.1.0"
+  }
+}
