@@ -5,7 +5,7 @@ describe "navigation", :js => true do
     it do
       notice = "This is a notice."
       visit "/?notice=#{ERB::Util.url_encode notice}"
-      page.should have_css(".humane-notice")
+      page.should have_css(".humane-info")
       page.should have_content(notice)
     end
   end
@@ -23,7 +23,7 @@ describe "navigation", :js => true do
     it do
       alert = "This is an alert."
       visit "/?alert=#{ERB::Util.url_encode alert}"
-      page.should have_css(".humane-alert")
+      page.should have_css(".humane-error")
       page.should have_content(alert)
     end
   end
