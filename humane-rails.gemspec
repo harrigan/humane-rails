@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{A gemified version of Marc Harter's humane-js.}
   s.license     = "MIT"
 
-  s.files = Dir["{app,lib}/**/*", "Rakefile", "README.md"]
+  s.files = Dir["{app,lib}/**/*", "Rakefile", "README.md", "humane-rails.gemspec"]
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", ">= 3.1.0"
