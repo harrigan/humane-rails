@@ -8,10 +8,6 @@ module HumaneRails
       end
     end
 
-    config.after_initialize do
-      Rails.application.config.assets.paths << root.join("vendor", "assets", "components")
-    end
-
     config.generators do |g|
       g.test_framework :rspec
     end
