@@ -15,9 +15,9 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,lib,vendor}/**/*", "humane-rails.gemspec", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/internal/log/*.log"] - Dir["spec/internal/tmp/**/*"] - ["spec/internal/tmp"]
 
-  s.add_dependency "rails", ">= 3.1.0"
+  s.add_dependency "rails", ">= 3.2.0"
 
-  s.add_development_dependency "rails", "~> 3.1.0"
+  s.add_development_dependency "rails", "~> 3.2.0"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "capybara"
   s.add_development_dependency "poltergeist"
