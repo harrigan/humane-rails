@@ -45,6 +45,10 @@ and one of the following directives to the top of your `application.css`:
 *= require humane-rails/jackedup
 ```
 
+```css
+*= require humane-rails/flatty
+```
+
 Don't forget to run `bundle update` after updating to the latest version of the gem to ensure that it is used by your Rails application.
 
 The gem also provides a helper for displaying flash messages:
